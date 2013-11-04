@@ -1,0 +1,188 @@
+<com.androidpositive.celllayout.CellLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:cl="http://schemas.android.com/apk/res/com.androidpositive.celllayout"
+    android:id="@+id/cell_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    cl:columns="4"
+    cl:spacing="1dp"
+    tools:context=".MainActivity"
+    tools:ignore="HardcodedText" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        cl:layout_cellsHeight="1"
+        cl:layout_cellsWidth="1"
+        cl:layout_left="0"
+        cl:layout_top="0"
+        android:background="#00FF00"
+        android:text="View 0" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        cl:layout_cellsHeight="1"
+        cl:layout_cellsWidth="1"
+        cl:layout_left="1"
+        cl:layout_top="0"
+        android:background="#FFFF00"
+        android:text="View 1" />
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        cl:layout_cellsHeight="1"
+        cl:layout_cellsWidth="1"
+        cl:layout_left="2"
+        cl:layout_top="0"
+        android:background="#FF2200"
+        android:text="View 2" />
+    
+   <TextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       cl:layout_cellsHeight="1"
+       cl:layout_cellsWidth="1"
+       cl:layout_left="3"
+       cl:layout_top="0"
+       android:background="#FFA555"
+       android:text="View 3" />
+
+   <TextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       cl:layout_cellsHeight="1"
+       cl:layout_cellsWidth="1"
+       cl:layout_left="0"
+       cl:layout_top="1"
+       android:background="#00FFF0"
+       android:text="View 4" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        cl:layout_cellsHeight="1"
+        cl:layout_cellsWidth="1"
+        cl:layout_left="1"
+        cl:layout_top="1"
+        android:background="#FFFFFF"
+        android:text="View 5" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        cl:layout_cellsHeight="1"
+        cl:layout_cellsWidth="1"
+        cl:layout_left="2"
+        cl:layout_top="1"
+        android:background="#00FA00"
+        android:text="View 6" />
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        cl:layout_cellsHeight="1"
+        cl:layout_cellsWidth="1"
+        cl:layout_left="3"
+        cl:layout_top="1"
+        android:background="#00F2F0"
+        android:text="View 7" />
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        cl:layout_cellsHeight="2"
+        cl:layout_cellsWidth="3"
+        cl:layout_left="0"
+        cl:layout_top="2"
+        android:background="#AAFFAA">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#AA33AA"
+            android:text="TextView 8" />
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:text="Button 5" />
+
+    </FrameLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        cl:layout_cellsHeight="2"
+        cl:layout_cellsWidth="1"
+        cl:layout_left="3"
+        cl:layout_top="2"
+        android:background="#45CCdd"
+        android:text="View 9" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        cl:layout_cellsHeight="3"
+        cl:layout_cellsWidth="1"
+        cl:layout_left="0"
+        cl:layout_top="4"
+        android:background="#FF00FF"
+        android:text="View 10" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        cl:layout_cellsHeight="3"
+        cl:layout_cellsWidth="1"
+        cl:layout_left="1"
+        cl:layout_top="4"
+        android:background="#FFFF00"
+        android:text="View 11" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        cl:layout_cellsHeight="3"
+        cl:layout_cellsWidth="1"
+        cl:layout_left="2"
+        cl:layout_top="4"
+        android:background="#00FF00"
+        android:text="View 12" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        cl:layout_cellsHeight="1"
+        cl:layout_cellsWidth="1"
+        cl:layout_left="3"
+        cl:layout_top="4"
+        android:background="#FFFF00"
+        android:text="View 13" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        cl:layout_cellsHeight="1"
+        cl:layout_cellsWidth="1"
+        cl:layout_left="3"
+        cl:layout_top="5"
+        android:background="#FFFFFF"
+        android:text="View 14" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        cl:layout_cellsHeight="1"
+        cl:layout_cellsWidth="1"
+        cl:layout_left="3"
+        cl:layout_top="6"
+        android:background="#555555"
+        android:text="View 15" />
+
+</com.androidpositive.celllayout.CellLayout>
