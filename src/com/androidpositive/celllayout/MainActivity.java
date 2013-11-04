@@ -1,14 +1,3 @@
-/*
- * Copyright 2013 Alexander Osmanov
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the
- * License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
- * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
- */
 package com.androidpositive.celllayout;
 
 import java.util.ArrayList;
@@ -21,13 +10,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver.OnPreDrawListener;
-import android.view.animation.AccelerateDecelerateInterpolator;
 
 import com.androidpositive.celllayout.CellLayout.LayoutParams;
-import com.nineoldandroids.animation.AnimatorSet;
-import com.nineoldandroids.animation.ObjectAnimator;
-import com.nineoldandroids.animation.PropertyValuesHolder;
-import com.nineoldandroids.animation.ValueAnimator;
 
 public class MainActivity extends Activity {
 
@@ -188,14 +172,6 @@ public class MainActivity extends Activity {
 
     }
 
-    private ValueAnimator createAnimator(View view, Rect child1Old, Rect child1New) {
-
-        PropertyValuesHolder leftHolder = PropertyValuesHolder.ofInt("left", child1Old.left, child1New.left);
-        PropertyValuesHolder rightHolder = PropertyValuesHolder.ofInt("right", child1Old.right, child1New.right);
-        PropertyValuesHolder topHolder = PropertyValuesHolder.ofInt("top", child1Old.top, child1New.top);
-        PropertyValuesHolder bottomHolder = PropertyValuesHolder.ofInt("bottom", child1Old.bottom, child1New.bottom);
-        return ObjectAnimator.ofPropertyValuesHolder(view, leftHolder, rightHolder, topHolder, bottomHolder);
-    }
 
     private static Rect getViewBounds(View child) {
         return new Rect(child.getLeft(), child.getTop(), child.getRight(), child.getBottom());
