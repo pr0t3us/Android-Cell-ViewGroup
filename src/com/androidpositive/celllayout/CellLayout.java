@@ -30,6 +30,8 @@ public class CellLayout extends ViewGroup implements OnTouchListener, OnLongClic
      * Default size in dp that will be used for a cell in case no other clues were given by parent.
      */
     private static final int DEFAULT_CELL_SIZE = 48;
+    
+    private static int ANIMATION_DURATION = 250;
 
     /**
      * Number of coumns.
@@ -43,8 +45,7 @@ public class CellLayout extends ViewGroup implements OnTouchListener, OnLongClic
 
     private float cellSize;
 
-    /*-------------------------*/
-    private static int ANIMATION_DURATION = 250;
+    /*-------------------------*/   
     
     private SparseIntArray newPositions = new SparseIntArray();
 
@@ -316,6 +317,67 @@ public class CellLayout extends ViewGroup implements OnTouchListener, OnLongClic
         if (aViewIsDragged()) return true;
         return false;
     }
+    
+
+
+    private void touchDown(MotionEvent event) {
+        Log.d(T, "::touchDown:" + "");
+        initialX = (int) event.getRawX();
+        initialY = (int) event.getRawY();
+        
+        // lastTouchX = (int)event.getRawX() + (currentPage() * gridPageWidth);
+        // lastTouchY = (int)event.getRawY();
+    }  
+    
+    //TODO: have swapping childs done
+    private void touchMove(MotionEvent event) {
+        if (movingView && aViewIsDragged()) {
+            lastTouchX = (int) event.getX();
+            lastTouchY = (int) event.getY();
+            // Log.i(T, "::touchMove:" + "lastTouchX="+lastTouchX+";lastTouchY="+lastTouchY);
+
+            ensureThereIsNoArtifact();
+
+            moveDraggedView(lastTouchX, lastTouchY);
+            manageSwapPosition(lastTouchX, lastTouchY);
+            // manageEdgeCoordinates(lastTouchX);
+            // manageDeleteZoneHover(lastTouchX, lastTouchY);
+        }
+    }
+
+    private void touchUp(MotionEvent event) {
+//        View draggedChild = getChildAt(draggedChildPosition);
+//        View swapChild = getChildAt(swapChildPosition);
+        Log.i(T, "::touchUp:" + "!aViewIsDragged()="+!aViewIsDragged());
+        Log.i(T, "::touchUp:" + "draggedChildPosition="+draggedChildPosition+";swapChildPosition="+swapChildPosition);
+        Log.i(T, "::touchUp:" + "draggedChild != null "+(draggedView != null));
+        Log.i(T, "::touchUp:" + "swapChild != null "+(swapView != null));
+
+        if (!aViewIsDragged()) {
+            
+            // if(onClickListener != null) {
+            // View clickedView = getChildAt(getTargetAtCoor((int) event.getX(), (int) event.getY()));
+            // if(clickedView != null)
+            // onClickListener.onClick(clickedView);
+            // }
+        } else {
+            cancelAnimations();
+            if (draggedView != null && swapView != null) {
+//              swapViews(draggedChild, swapChild);
+              swapChildViews(draggedChildPosition, swapChildPosition);
+              invalidate();
+              requestLayout();
+          }
+            // manageChildrenReordering();
+            // hideDeleteView();
+            // cancelEdgeTimer();
+
+            movingView = false;
+            dragged = -1;
+            // container.enableScroll();
+
+        }
+    }
 
     private int positionForView(View v) {
         for (int index = 0; index < getItemViewCount(); index++) {
@@ -374,49 +436,6 @@ public class CellLayout extends ViewGroup implements OnTouchListener, OnLongClic
     }
 
 
-
-    private void touchDown(MotionEvent event) {
-        Log.d(T, "::touchDown:" + "");
-        initialX = (int) event.getRawX();
-        initialY = (int) event.getRawY();
-        
-        // lastTouchX = (int)event.getRawX() + (currentPage() * gridPageWidth);
-        // lastTouchY = (int)event.getRawY();
-    }
-
-    private void touchUp(MotionEvent event) {
-//        View draggedChild = getChildAt(draggedChildPosition);
-//        View swapChild = getChildAt(swapChildPosition);
-        Log.i(T, "::touchUp:" + "!aViewIsDragged()="+!aViewIsDragged());
-        Log.i(T, "::touchUp:" + "draggedChildPosition="+draggedChildPosition+";swapChildPosition="+swapChildPosition);
-        Log.i(T, "::touchUp:" + "draggedChild != null "+(draggedView != null));
-        Log.i(T, "::touchUp:" + "swapChild != null "+(swapView != null));
-
-        if (!aViewIsDragged()) {
-            
-            // if(onClickListener != null) {
-            // View clickedView = getChildAt(getTargetAtCoor((int) event.getX(), (int) event.getY()));
-            // if(clickedView != null)
-            // onClickListener.onClick(clickedView);
-            // }
-        } else {
-            cancelAnimations();
-            if (draggedView != null && swapView != null) {
-//              swapViews(draggedChild, swapChild);
-              swapChildViews(draggedChildPosition, swapChildPosition);
-              invalidate();
-              requestLayout();
-          }
-            // manageChildrenReordering();
-            // hideDeleteView();
-            // cancelEdgeTimer();
-
-            movingView = false;
-            dragged = -1;
-            // container.enableScroll();
-
-        }
-    }
 
     private void bringDraggedToFront() {
         View draggedView = getChildAt(dragged);
@@ -483,23 +502,7 @@ public class CellLayout extends ViewGroup implements OnTouchListener, OnLongClic
         return getChildAt(getChildCount() - 1);
         // return getChildAt(dragged);
     }
-
-    //TODO: have swapping childs done
-    private void touchMove(MotionEvent event) {
-        if (movingView && aViewIsDragged()) {
-            lastTouchX = (int) event.getX();
-            lastTouchY = (int) event.getY();
-            // Log.i(T, "::touchMove:" + "lastTouchX="+lastTouchX+";lastTouchY="+lastTouchY);
-
-            ensureThereIsNoArtifact();
-
-            moveDraggedView(lastTouchX, lastTouchY);
-            manageSwapPosition(lastTouchX, lastTouchY);
-            // manageEdgeCoordinates(lastTouchX);
-            // manageDeleteZoneHover(lastTouchX, lastTouchY);
-        }
-    }
-
+    
     private void ensureThereIsNoArtifact() {
         invalidate();
     }
@@ -527,6 +530,11 @@ public class CellLayout extends ViewGroup implements OnTouchListener, OnLongClic
     private void manageSwapPosition(int x, int y) {
         int positionInPage = getPositionInPage(x, y);
         swapChildPosition = positionInPage-1;
+        if (swapChildPosition < 0) {
+            swapChildPosition = 0;
+        } else if (swapChildPosition >= getChildCount()) {
+            swapChildPosition = getChildCount() - 1;
+        }
         swapView = getChildAt(swapChildPosition);
 //        int target = positionOfItem(positionInPage);
 //        if (childHasMoved(target) && target != lastTarget) {
@@ -759,6 +767,7 @@ public class CellLayout extends ViewGroup implements OnTouchListener, OnLongClic
     
     public void setOnClickListener(OnClickListener l) {
         onClickListener = l;
-    }
+    }    
+
 
 }
