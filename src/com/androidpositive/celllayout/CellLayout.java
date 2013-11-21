@@ -349,6 +349,7 @@ public class CellLayout extends ViewGroup implements OnTouchListener, OnLongClic
 //        View draggedChild = getChildAt(draggedChildPosition);
 //        View swapChild = getChildAt(swapChildPosition);
         Log.i(T, "::touchUp:" + "!aViewIsDragged()="+!aViewIsDragged());
+        Log.i(T, "::touchUp:" + "dragged "+dragged);
         Log.i(T, "::touchUp:" + "draggedChildPosition="+draggedChildPosition+";swapChildPosition="+swapChildPosition);
         Log.i(T, "::touchUp:" + "draggedChild != null "+(draggedView != null));
         Log.i(T, "::touchUp:" + "swapChild != null "+(swapView != null));
@@ -364,7 +365,7 @@ public class CellLayout extends ViewGroup implements OnTouchListener, OnLongClic
             cancelAnimations();
             if (draggedView != null && swapView != null) {
 //              swapViews(draggedChild, swapChild);
-              swapChildViews(draggedChildPosition, swapChildPosition);
+              swapChildViews(dragged, swapChildPosition);
               invalidate();
               requestLayout();
           }
@@ -732,10 +733,13 @@ public class CellLayout extends ViewGroup implements OnTouchListener, OnLongClic
     }
     
     private void swapChildViews(int childPos1, int childPos2) {
-        View child1 = getChildAt(childPos1);
+        Log.e(T, "::swapChildViews:" + "childPos2 "+childPos2);
+        Log.e(T, "::swapChildViews:" + "childCount "+getChildCount());
+        View child1 = getDraggedView();
+//                getChildAt(childPos1);
         View child2 = getChildAt(childPos2);
-        Rect child1Bounds = getViewBounds(child1);
-        Rect child2Bounds = getViewBounds(child2);
+//        Rect child1Bounds = getViewBounds(child1);
+//        Rect child2Bounds = getViewBounds(child2);
         removeView(child1);
         addView(child1, childPos2);
         removeView(child2);
