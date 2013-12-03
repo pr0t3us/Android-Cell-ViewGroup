@@ -352,7 +352,7 @@ public class CellLayout extends ViewGroup implements OnTouchListener, OnLongClic
         Log.i(T, "::touchUp:" + "dragged "+dragged);
         Log.i(T, "::touchUp:" + "draggedChildPosition="+draggedChildPosition+";swapChildPosition="+swapChildPosition);
         Log.i(T, "::touchUp:" + "draggedChild != null "+(draggedView != null));
-        Log.i(T, "::touchUp:" + "swapChild != null "+(swapView != null));
+//        Log.i(T, "::touchUp:" + "swapChild != null "+(swapView != null));
 
         if (!aViewIsDragged()) {
             
@@ -363,12 +363,12 @@ public class CellLayout extends ViewGroup implements OnTouchListener, OnLongClic
             // }
         } else {
             cancelAnimations();
-            if (draggedView != null && swapView != null) {
+//            if (swapView != null) {
 //              swapViews(draggedChild, swapChild);
               swapChildViews(dragged, swapChildPosition);
               invalidate();
               requestLayout();
-          }
+//          }
             // manageChildrenReordering();
             // hideDeleteView();
             // cancelEdgeTimer();
@@ -512,7 +512,7 @@ public class CellLayout extends ViewGroup implements OnTouchListener, OnLongClic
     int swapChildPosition;
     
     View draggedView;
-    View swapView;
+//    View swapView;
 
     private void moveDraggedView(int x, int y) {
         View childAt = getDraggedView();
@@ -531,17 +531,38 @@ public class CellLayout extends ViewGroup implements OnTouchListener, OnLongClic
     private void manageSwapPosition(int x, int y) {
         int positionInPage = getPositionInPage(x, y);
         swapChildPosition = positionInPage-1;
+//        swapChildPosition = getTargetAtCoor(x, y);
         if (swapChildPosition < 0) {
             swapChildPosition = 0;
-        } else if (swapChildPosition >= getChildCount()) {
-            swapChildPosition = getChildCount() - 1;
         }
-        swapView = getChildAt(swapChildPosition);
+//        else if (swapChildPosition >= getChildCount()) {
+//            swapChildPosition = getChildCount() - 1;
+//        }
+//        swapView = getChildAt(swapChildPosition);
+//        swapView = getNewChildAt(x, y);
 //        int target = positionOfItem(positionInPage);
 //        if (childHasMoved(target) && target != lastTarget) {
 //            animateGap(target, positionInPage);
 //            lastTarget = target;
 //        }
+    }
+    
+    private View getNewChildAt(int x, int y) {
+        final int count = getChildCount();
+        for (int i = 0; i < count; i++) {
+            View child = getChildAt(i);
+            LayoutParams lp = (LayoutParams) child.getLayoutParams();
+//            Log.e(T, "::getNewChildAt:" + "x= "+x+";y= "+y);
+            if (i==2) {
+//             Log.e(T, "::getNewChildAt:" + "lp.left "+lp.left+"; lp.top "+lp.top);
+//             Log.e(T, "::getNewChildAt:" + "lp.width "+lp.width+"; lp.height "+lp.height);
+            }            
+            if ((lp.left <= x) && (x <= lp.left + lp.width) && (lp.top >= y) && (y >= lp.top - lp.height)) {
+                Log.e(T, "::getNewChildAt:" + "!!! child found at "+positionForView(child));
+                return child;
+            }
+        }
+        return null;
     }
 
     private int getTargetAtCoor(int x, int y) {
@@ -555,7 +576,7 @@ public class CellLayout extends ViewGroup implements OnTouchListener, OnLongClic
     private int getPositionInPage(int x, int y) {
         int col = getColumnOfCoordinate(x);
         int row = getRowOfCoordinate(y);
-        Log.w(T, "::getTargetAtCoor:" + "col=" + col + ";row=" + row);
+//        Log.w(T, "::getPositionInPage:" + "col=" + col + ";row=" + row);
         int positionInPage = col + (row * columns);
         return positionInPage;
     }
@@ -569,7 +590,7 @@ public class CellLayout extends ViewGroup implements OnTouchListener, OnLongClic
             }
             col++;
         }
-        Log.i(T, "::getColumnOfCoordinate:" + "col=" + col);
+//        Log.i(T, "::getColumnOfCoordinate:" + "col=" + col);
         return col;
     }
 
@@ -581,6 +602,7 @@ public class CellLayout extends ViewGroup implements OnTouchListener, OnLongClic
             }
             row++;
         }
+//        Log.i(T, "::getRowOfCoordinate:" + "row=" + row);
         return row;
     }
 
@@ -733,15 +755,19 @@ public class CellLayout extends ViewGroup implements OnTouchListener, OnLongClic
     }
     
     private void swapChildViews(int childPos1, int childPos2) {
-        Log.e(T, "::swapChildViews:" + "childPos2 "+childPos2);
-        Log.e(T, "::swapChildViews:" + "childCount "+getChildCount());
+        Log.e(T, "::swapChildViews:" + "childPos1 "+childPos1 + "; childPos2 "+childPos2);
+//        Log.e(T, "::swapChildViews:" + "getDraggedView "+positionForView(getDraggedView())+ "; swapView "+positionForView(swapView));
+        Log.e(T, "::swapChildViews:" + ""+"/childCount "+getChildCount());
         View child1 = getDraggedView();
-//                getChildAt(childPos1);
-        View child2 = getChildAt(childPos2);
+//        View child1 = getAdjustedChildPosition(childPos1);
+//        View child2 = getChildAt(childPos2);
+        int adjustedChildPosition = getAdjustedChildPosition(childPos2);
+        View child2 = getChildAt(adjustedChildPosition);
+//        View child2 = swapView;
 //        Rect child1Bounds = getViewBounds(child1);
 //        Rect child2Bounds = getViewBounds(child2);
         removeView(child1);
-        addView(child1, childPos2);
+        addView(child1, adjustedChildPosition);
         removeView(child2);
         addView(child2, childPos1);
 //        child1.setClipBounds(child2Bounds);
@@ -763,6 +789,25 @@ public class CellLayout extends ViewGroup implements OnTouchListener, OnLongClic
         dst.height = src.height;
         dst.top = src.top;
         dst.left = src.left;
+    }
+    
+    private int getAdjustedChildPosition(int origChildPos) {
+        for (int i = 0; i < getChildCount(); i++) {
+            View child = getChildAt(i);
+            LayoutParams lp = (LayoutParams) child.getLayoutParams();
+//            Log.e(T, "::getNewChildAt:" + "x= "+x+";y= "+y);
+            if (i<origChildPos) {
+               if (lp.width > 1) {
+                   origChildPos = origChildPos - lp.width+1;
+               }
+               if (lp.height > 1) {
+                   origChildPos = origChildPos - lp.height+1;
+               }
+            } else {
+                return i;
+            }
+        }
+        return 0;
     }
     
     private static Rect getViewBounds(View child) {
